@@ -1,0 +1,12 @@
+<features name="gate-plugin-renci-hatteras-${project.version}">
+
+  <feature name="gate-plugin-renci-hatteras" version="${project.version}" resolver="(obr)">
+    <bundle>mvn:org.renci.gate.plugins.renci.hatteras/renci-hatteras-service/${project.version}</bundle>
+  </feature>
+
+</features>
+
+
+
+
+
