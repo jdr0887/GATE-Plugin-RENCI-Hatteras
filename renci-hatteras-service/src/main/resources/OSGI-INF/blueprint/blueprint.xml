@@ -13,8 +13,8 @@
     </cm:default-properties>
   </cm:property-placeholder>
 
-  <bean id="serialQueue" class="org.renci.jlrm.Queue">
-    <property name="name" value="serial" />
+  <bean id="batchQueue" class="org.renci.jlrm.Queue">
+    <property name="name" value="batch" />
     <property name="weight" value="1" />
     <property name="maxJobLimit" value="20" />
     <property name="maxMultipleJobsToSubmit" value="2" />
@@ -31,7 +31,7 @@
     <property name="maxTotalRunning" value="${maxTotalRunning}" />
     <property name="queueInfoMap">
       <map>
-        <entry key="serial" value-ref="serialQueue" />
+        <entry key="batch" value-ref="batchQueue" />
       </map>
     </property>
   </bean>
