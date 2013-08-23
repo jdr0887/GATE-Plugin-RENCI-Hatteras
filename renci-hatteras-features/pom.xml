@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci.gate.plugins.renci</groupId>
     <artifactId>hatteras</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5-SNAPSHOT</version>
   </parent>
   <name>GATE :: Plugins :: RENCI :: Hatteras :: Features</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.gate.plugins.renci.hatteras</groupId>
   <artifactId>renci-hatteras-features</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <build>
     <plugins>
