@@ -6,7 +6,7 @@
     <cm:default-properties>
       <cm:property name="maxTotalPending" value="4" />
       <cm:property name="maxTotalRunning" value="20" />
-      <cm:property name="submitHost" value="br0.renci.org" />
+      <cm:property name="submitHost" value="ht0.renci.org" />
       <cm:property name="collectorHost" value="biodev2.its.unc.edu" />
       <cm:property name="activeQueues" value="serial" />
       <cm:property name="username" value="" />
