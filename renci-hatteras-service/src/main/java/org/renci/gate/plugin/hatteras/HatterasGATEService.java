@@ -38,7 +38,7 @@ public class HatterasGATEService extends AbstractGATEService {
     public Boolean isValid() throws GATEException {
         logger.info("ENTERING isValid()");
         try {
-            String results = SSHConnectionUtil.execute("ls /scratch/projects/mapseq | wc -l", getSite().getUsername(),
+            String results = SSHConnectionUtil.execute("ls /projects/mapseq | wc -l", getSite().getUsername(),
                     getSite().getSubmitHost());
             if (StringUtils.isNotEmpty(results) && Integer.valueOf(results.trim()) > 0) {
                 return true;
@@ -54,7 +54,7 @@ public class HatterasGATEService extends AbstractGATEService {
         logger.info("ENTERING lookupMetrics()");
         Map<String, GlideinMetric> metricsMap = new HashMap<String, GlideinMetric>();
 
-        //stub out the metricsMap
+        // stub out the metricsMap
         Map<String, Queue> queueInfoMap = getSite().getQueueInfoMap();
         for (String key : queueInfoMap.keySet()) {
             Queue queue = queueInfoMap.get(key);
