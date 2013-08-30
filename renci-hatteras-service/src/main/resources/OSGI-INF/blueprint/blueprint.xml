@@ -25,6 +25,7 @@
   <bean id="site" class="org.renci.jlrm.Site">
     <property name="name" value="Hatteras" />
     <property name="project" value="RENCI" />
+    <property name="numberOfProcessors" value="16" />
     <property name="username" value="${username}" />
     <property name="submitHost" value="${submitHost}" />
     <property name="maxTotalPending" value="${maxTotalPending}" />
