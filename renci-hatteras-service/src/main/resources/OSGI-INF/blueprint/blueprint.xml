@@ -30,10 +30,10 @@
     <property name="submitHost" value="${submitHost}" />
     <property name="maxTotalPending" value="${maxTotalPending}" />
     <property name="maxTotalRunning" value="${maxTotalRunning}" />
-    <property name="queueInfoMap">
-      <map>
-        <entry key="batch" value-ref="batchQueue" />
-      </map>
+    <property name="queueList">
+      <list>
+        <ref component-id="batchQueue" />
+      </list>
     </property>
   </bean>
 
