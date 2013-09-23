@@ -98,11 +98,6 @@ public class HatterasGATEService extends AbstractGATEService {
     public void createGlidein(Queue queue) throws GATEException {
         logger.info("ENTERING createGlidein(Queue)");
 
-        if (StringUtils.isNotEmpty(getActiveQueues()) && !getActiveQueues().contains(queue.getName())) {
-            logger.warn("queue name is not in active queue list...see etc/org.renci.gate.plugin.hatteras.cfg");
-            return;
-        }
-
         File submitDir = new File("/tmp", System.getProperty("user.name"));
         submitDir.mkdirs();
 
