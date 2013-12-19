@@ -14,16 +14,16 @@ import org.renci.jlrm.slurm.ssh.SLURMSSHSubmitCondorGlideinCallable;
 @Command(scope = "renci-hatteras", name = "create-glidein", description = "Create Glidein")
 public class CreateHatterasGlideinAction extends AbstractAction {
 
-    @Option(name = "username", required = true, multiValued = false)
+    @Option(name = "--username", required = true, multiValued = false)
     private String username;
 
-    @Option(name = "submitHost", required = true, multiValued = false)
+    @Option(name = "--submitHost", required = true, multiValued = false)
     private String submitHost;
 
-    @Option(name = "queueName", required = true, multiValued = false)
+    @Option(name = "--queueName", required = true, multiValued = false)
     private String queueName;
 
-    @Option(name = "collectorHost", required = true, multiValued = false)
+    @Option(name = "--collectorHost", required = true, multiValued = false)
     private String collectorHost;
 
     public CreateHatterasGlideinAction() {
