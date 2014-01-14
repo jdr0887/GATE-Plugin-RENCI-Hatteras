@@ -46,7 +46,7 @@ public class CreateHatterasGlideinAction extends AbstractAction {
         try {
             SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable();
             callable.setCollectorHost(collectorHost);
-            callable.setUsername("rc_renci.svc");
+            callable.setUsername(System.getProperty("user.name"));
             callable.setSite(site);
             callable.setJobName("glidein");
             callable.setQueue(queue);
