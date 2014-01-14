@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.gate.plugins.renci</groupId>
   <artifactId>hatteras</artifactId>
-  <version>0.2.13-SNAPSHOT</version>
+  <version>0.2.13</version>
   <packaging>pom</packaging>
   <properties>
     <karaf.version>2.3.3</karaf.version>
@@ -42,7 +42,7 @@
   <scm>
     <developerConnection>scm:git:ssh://${user.name}@code.renci.org/gitroot/g_p_r_h</developerConnection>
     <connection>scm:git:ssh://developername@code.renci.org/gitroot/g_p_r_h</connection>
-    <tag>HEAD</tag>
+    <tag>hatteras-0.2.13</tag>
   </scm>
   <dependencyManagement>
     <dependencies>
