@@ -38,7 +38,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
     @Override
     public Boolean isValid() throws GATEException {
-        logger.info("ENTERING isValid()");
+        logger.debug("ENTERING isValid()");
         try {
             String results = SSHConnectionUtil.execute("ls /projects/mapseq | wc -l", getSite().getUsername(),
                     getSite().getSubmitHost());
@@ -53,7 +53,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
     @Override
     public List<GlideinMetric> lookupMetrics() throws GATEException {
-        logger.info("ENTERING lookupMetrics()");
+        logger.debug("ENTERING lookupMetrics()");
         Map<String, GlideinMetric> metricsMap = new HashMap<String, GlideinMetric>();
 
         List<Queue> queueList = getSite().getQueueList();
@@ -97,7 +97,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
     @Override
     public void createGlidein(Queue queue) throws GATEException {
-        logger.info("ENTERING createGlidein(Queue)");
+        logger.debug("ENTERING createGlidein(Queue)");
 
         File submitDir = new File("/tmp", System.getProperty("user.name"));
         submitDir.mkdirs();
@@ -124,7 +124,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
     @Override
     public void deleteGlidein(Queue queue) throws GATEException {
-        logger.info("ENTERING deleteGlidein(Queue)");
+        logger.debug("ENTERING deleteGlidein(Queue)");
         try {
             logger.info("siteInfo: {}", getSite());
             logger.info("queueInfo: {}", queue);
@@ -150,7 +150,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
     @Override
     public void deletePendingGlideins() throws GATEException {
-        logger.info("ENTERING deletePendingGlideins()");
+        logger.debug("ENTERING deletePendingGlideins()");
         try {
             SLURMSSHLookupStatusCallable lookupStatusCallable = new SLURMSSHLookupStatusCallable(getSite());
             Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(lookupStatusCallable)
