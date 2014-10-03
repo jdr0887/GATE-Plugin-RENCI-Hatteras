@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci.gate.plugins.renci</groupId>
     <artifactId>hatteras</artifactId>
-    <version>0.2.16</version>
+    <version>0.2.17-SNAPSHOT</version>
   </parent>
   <name>GATE :: Plugins :: RENCI :: Hatteras :: Commands</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.gate.plugins.renci.hatteras</groupId>
   <artifactId>renci-hatteras-commands</artifactId>
-  <version>0.2.16</version>
+  <version>0.2.17-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
