@@ -68,9 +68,11 @@ public class HatterasGATEService extends AbstractGATEService {
 
             if (jobStatusSet != null && jobStatusSet.size() > 0) {
 
+                String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
+
                 for (SLURMJobStatusInfo info : jobStatusSet) {
 
-                    if (!info.getJobName().contains("glidein")) {
+                    if (!info.getJobName().equals(jobName)) {
                         continue;
                     }
 
@@ -132,9 +134,9 @@ public class HatterasGATEService extends AbstractGATEService {
             Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(lookupStatusCallable)
                     .get();
             Iterator<SLURMJobStatusInfo> iter = jobStatusSet.iterator();
+            String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
             while (iter.hasNext()) {
                 SLURMJobStatusInfo info = iter.next();
-                String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
                 if (!info.getJobName().equals(jobName)) {
                     continue;
                 }
@@ -156,8 +158,8 @@ public class HatterasGATEService extends AbstractGATEService {
             SLURMSSHLookupStatusCallable lookupStatusCallable = new SLURMSSHLookupStatusCallable(getSite());
             Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(lookupStatusCallable)
                     .get();
+            String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
             for (SLURMJobStatusInfo info : jobStatusSet) {
-                String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
                 if (!info.getJobName().equals(jobName)) {
                     continue;
                 }
