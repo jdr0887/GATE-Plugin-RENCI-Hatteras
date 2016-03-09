@@ -32,7 +32,6 @@ public class CreateGlideinAction implements Action {
 
     public CreateGlideinAction() {
         super();
-        this.hostAllow = "*.unc.edu";
     }
 
     @Override
@@ -57,8 +56,9 @@ public class CreateGlideinAction implements Action {
             callable.setQueue(queue);
             callable.setSubmitDir(submitDir);
             callable.setRequiredMemory(40);
-            callable.setHostAllowRead("*.renci.org");
-            callable.setHostAllowWrite("*.renci.org");
+            //*.renci.org
+            callable.setHostAllowRead(hostAllow);
+            callable.setHostAllowWrite(hostAllow);
             SLURMSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
