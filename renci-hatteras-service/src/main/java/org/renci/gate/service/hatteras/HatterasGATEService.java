@@ -99,10 +99,6 @@ public class HatterasGATEService extends AbstractGATEService {
     @Override
     public void createGlidein(Queue queue) throws GATEException {
         logger.debug("ENTERING createGlidein(Queue)");
-
-        File submitDir = new File("/tmp", System.getProperty("user.name"));
-        submitDir.mkdirs();
-
         try {
             logger.info(getSite().toString());
             logger.info(queue.toString());
@@ -112,7 +108,6 @@ public class HatterasGATEService extends AbstractGATEService {
             callable.setSite(getSite());
             callable.setJobName(String.format("glidein-%s", getSite().getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setSubmitDir(submitDir);
             callable.setRequiredMemory(40);
             callable.setHostAllowRead(getHostAllow());
             callable.setHostAllowWrite(getHostAllow());
