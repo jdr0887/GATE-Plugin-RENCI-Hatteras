@@ -35,8 +35,6 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     private SLURMSSHJob job;
 
-    private File submitDir;
-
     private String collectorHost;
 
     private Integer requiredMemory;
@@ -200,14 +198,6 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     public void setJob(SLURMSSHJob job) {
         this.job = job;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
     public String getCollectorHost() {
