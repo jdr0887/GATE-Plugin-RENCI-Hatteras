@@ -104,8 +104,8 @@ public class HatterasGATEService extends AbstractGATEService {
         submitDir.mkdirs();
 
         try {
-            logger.info("siteInfo: {}", getSite());
-            logger.info("queueInfo: {}", queue);
+            logger.info(getSite().toString());
+            logger.info(queue.toString());
             HatterasSubmitCondorGlideinCallable callable = new HatterasSubmitCondorGlideinCallable();
             callable.setCollectorHost(getCollectorHost());
             callable.setUsername(System.getProperty("user.name"));
