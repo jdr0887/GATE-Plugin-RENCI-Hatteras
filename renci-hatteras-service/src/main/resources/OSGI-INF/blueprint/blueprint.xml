@@ -8,7 +8,7 @@
       <cm:property name="maxRunning" value="20" />
       <cm:property name="submitHost" value="ht0.renci.org" />
       <cm:property name="collectorHost" value="biodev2.its.unc.edu" />
-      <cm:property name="activeQueues" value="serial" />
+      <cm:property name="activeQueues" value="batch" />
       <cm:property name="username" value="" />
       <cm:property name="hostAllow" value="*.unc.edu" />
     </cm:default-properties>
