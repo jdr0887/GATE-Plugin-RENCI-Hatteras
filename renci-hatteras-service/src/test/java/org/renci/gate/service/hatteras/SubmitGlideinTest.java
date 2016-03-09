@@ -1,6 +1,5 @@
 package org.renci.gate.service.hatteras;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -36,7 +35,6 @@ public class SubmitGlideinTest {
             callable.setSite(site);
             callable.setJobName(String.format("glidein-%s", site.getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setSubmitDir(new File("/home/mapseq/tmp"));
             callable.setRequiredMemory(40);
             callable.setHostAllowRead("*.renci.org");
             callable.setHostAllowWrite("*.renci.org");
