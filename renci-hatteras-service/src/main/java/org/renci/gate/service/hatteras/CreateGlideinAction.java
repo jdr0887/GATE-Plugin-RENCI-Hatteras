@@ -46,7 +46,6 @@ public class CreateGlideinAction implements Action {
         queue.setRunTime(5760L);
         queue.setNumberOfProcessors(16);
 
-        File submitDir = new File("/tmp");
         try {
             HatterasSubmitCondorGlideinCallable callable = new HatterasSubmitCondorGlideinCallable();
             callable.setCollectorHost(collectorHost);
@@ -54,9 +53,8 @@ public class CreateGlideinAction implements Action {
             callable.setSite(site);
             callable.setJobName(String.format("glidein-%s", site.getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setSubmitDir(submitDir);
             callable.setRequiredMemory(40);
-            //*.renci.org
+            // *.renci.org
             callable.setHostAllowRead(hostAllow);
             callable.setHostAllowWrite(hostAllow);
             SLURMSSHJob job = callable.call();
