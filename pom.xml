@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.gate.plugins.renci</groupId>
   <artifactId>hatteras</artifactId>
-  <version>0.2.24</version>
+  <version>0.2.25-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
     <renci.gate.version>0.2.21</renci.gate.version>
@@ -28,7 +28,7 @@
     <url>https://github.com/jdr0887/GATE-Plugin-RENCI-Hatteras</url>
     <developerConnection>scm:git:git@github.com:jdr0887/GATE-Plugin-RENCI-Hatteras.git</developerConnection>
     <connection>scm:git:git@github.com:jdr0887/GATE-Plugin-RENCI-Hatteras.git</connection>
-    <tag>hatteras-0.2.24</tag>
+    <tag>HEAD</tag>
   </scm>
   <dependencyManagement>
     <dependencies>
