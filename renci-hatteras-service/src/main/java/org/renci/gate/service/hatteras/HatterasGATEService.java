@@ -108,7 +108,7 @@ public class HatterasGATEService extends AbstractGATEService {
             callable.setSite(getSite());
             callable.setJobName(String.format("glidein-%s", getSite().getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setRequiredMemory(88);
+            callable.setRequiredMemory(90);
             callable.setHostAllowRead(getHostAllow());
             callable.setHostAllowWrite(getHostAllow());
             Executors.newSingleThreadExecutor().submit(callable).get();

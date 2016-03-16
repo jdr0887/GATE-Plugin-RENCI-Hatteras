@@ -81,7 +81,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(this.queue.getRunTime());
-        job.setMemory(this.requiredMemory * 1024);
+        job.setMemory(this.requiredMemory * 1000);
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("collectorHost", this.collectorHost);
@@ -99,7 +99,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("requiredMemory", this.requiredMemory * 1024);
+        velocityContext.put("requiredMemory", this.requiredMemory * 1000);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
 
