@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.gate.plugins.renci</groupId>
   <artifactId>hatteras</artifactId>
-  <version>0.2.25-SNAPSHOT</version>
+  <version>0.2.24-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
     <renci.gate.version>0.2.21</renci.gate.version>
