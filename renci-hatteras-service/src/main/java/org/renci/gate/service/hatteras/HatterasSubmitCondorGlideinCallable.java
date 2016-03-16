@@ -81,7 +81,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(this.queue.getRunTime());
-        job.setMemory(null);
+        job.setMemory(this.requiredMemory * 1024);
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("collectorHost", this.collectorHost);
