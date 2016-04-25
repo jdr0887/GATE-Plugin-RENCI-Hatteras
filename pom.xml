@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.renci.gate</groupId>
     <artifactId>gate</artifactId>
-    <version>0.1.7</version>    
+    <version>0.1.9</version>    
   </parent>
   <name>GATE :: Plugins :: RENCI :: Hatteras</name>
   <modelVersion>4.0.0</modelVersion>
@@ -11,7 +11,7 @@
   <version>0.2.26-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-    <renci.gate.version>0.2.22</renci.gate.version>
+    <renci.gate.version>0.2.23</renci.gate.version>
   </properties>
   <issueManagement>
     <system>GitHub Issues</system>
