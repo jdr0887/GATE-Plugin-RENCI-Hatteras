@@ -53,7 +53,7 @@ public class CreateGlideinAction implements Action {
             callable.setSite(site);
             callable.setJobName(String.format("glidein-%s", site.getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setRequiredMemory(40);
+            callable.setRequiredMemory("90000");
             // *.renci.org
             callable.setHostAllowRead(hostAllow);
             callable.setHostAllowWrite(hostAllow);

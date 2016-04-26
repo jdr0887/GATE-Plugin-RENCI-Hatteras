@@ -35,7 +35,7 @@ public class SubmitGlideinTest {
             callable.setSite(site);
             callable.setJobName(String.format("glidein-%s", site.getName().toLowerCase()));
             callable.setQueue(queue);
-            callable.setRequiredMemory(40);
+            callable.setRequiredMemory("90000");
             callable.setHostAllowRead("*.renci.org");
             callable.setHostAllowWrite("*.renci.org");
             Executors.newSingleThreadExecutor().submit(callable).get();
