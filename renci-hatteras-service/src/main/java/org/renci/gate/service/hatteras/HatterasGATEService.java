@@ -1,6 +1,5 @@
 package org.renci.gate.service.hatteras;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,7 +28,9 @@ import org.slf4j.LoggerFactory;
  */
 public class HatterasGATEService extends AbstractGATEService {
 
-    private final Logger logger = LoggerFactory.getLogger(HatterasGATEService.class);
+    private static final Logger logger = LoggerFactory.getLogger(HatterasGATEService.class);
+
+    private String numberOfProcessors;
 
     public HatterasGATEService() {
         super();
@@ -109,6 +110,7 @@ public class HatterasGATEService extends AbstractGATEService {
             callable.setJobName(String.format("glidein-%s", getSite().getName().toLowerCase()));
             callable.setQueue(queue);
             callable.setRequiredMemory("90000");
+            callable.setNumberOfProcessors(this.numberOfProcessors);
             callable.setHostAllowRead(getHostAllow());
             callable.setHostAllowWrite(getHostAllow());
             Executors.newSingleThreadExecutor().submit(callable).get();
@@ -167,6 +169,14 @@ public class HatterasGATEService extends AbstractGATEService {
         } catch (Exception e) {
             throw new GATEException(e);
         }
+    }
+
+    public String getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(String numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
     }
 
 }
