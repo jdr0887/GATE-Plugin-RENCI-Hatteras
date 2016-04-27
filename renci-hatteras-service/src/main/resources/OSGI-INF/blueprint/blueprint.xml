@@ -4,13 +4,14 @@
 
   <cm:property-placeholder persistent-id="org.renci.gate.service.hatteras" update-strategy="reload">
     <cm:default-properties>
-      <cm:property name="maxPending" value="4" />
+      <cm:property name="maxPending" value="2" />
       <cm:property name="maxRunning" value="20" />
       <cm:property name="submitHost" value="ht0.renci.org" />
-      <cm:property name="collectorHost" value="biodev2.its.unc.edu" />
+      <cm:property name="collectorHost" value="mps.renci.org" />
       <cm:property name="activeQueues" value="batch" />
-      <cm:property name="username" value="" />
-      <cm:property name="hostAllow" value="*.unc.edu" />
+      <cm:property name="username" value="mapseq" />
+      <cm:property name="numberOfProcessors" value="$(DETECTED_CORES)/2" />
+      <cm:property name="hostAllow" value="*.renci.org" />
     </cm:default-properties>
   </cm:property-placeholder>
 
@@ -40,6 +41,7 @@
     <property name="collectorHost" value="${collectorHost}" />
     <property name="activeQueues" value="${activeQueues}" />
     <property name="hostAllow" value="${hostAllow}" />
+    <property name="numberOfProcessors" value="${numberOfProcessors}" />
     <cm:managed-properties persistent-id="org.renci.gate.service.hatteras" update-strategy="container-managed" />
   </bean>
 
