@@ -1,7 +1,5 @@
 package org.renci.gate.service.hatteras;
 
-import java.io.File;
-
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
@@ -30,6 +28,9 @@ public class CreateGlideinAction implements Action {
     @Option(name = "--hostAllow", required = false, multiValued = false)
     private String hostAllow;
 
+    @Option(name = "--numberOfProcessors", required = false, multiValued = false)
+    private String numberOfProcessors = "$(DETECTED_CORES)/2";
+
     public CreateGlideinAction() {
         super();
     }
@@ -55,6 +56,7 @@ public class CreateGlideinAction implements Action {
             callable.setQueue(queue);
             callable.setRequiredMemory("90000");
             // *.renci.org
+            callable.setNumberOfProcessors(numberOfProcessors);
             callable.setHostAllowRead(hostAllow);
             callable.setHostAllowWrite(hostAllow);
             SLURMSSHJob job = callable.call();
@@ -104,6 +106,14 @@ public class CreateGlideinAction implements Action {
 
     public void setHostAllow(String hostAllow) {
         this.hostAllow = hostAllow;
+    }
+
+    public String getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(String numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
     }
 
 }
