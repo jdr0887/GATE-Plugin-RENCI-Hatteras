@@ -49,7 +49,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     private String hostAllowWrite;
 
-    private String numberOfProcessors = "$(DETECTED_CORES)";
+    private String numberOfProcessors;
 
     public HatterasSubmitCondorGlideinCallable() {
         super();
