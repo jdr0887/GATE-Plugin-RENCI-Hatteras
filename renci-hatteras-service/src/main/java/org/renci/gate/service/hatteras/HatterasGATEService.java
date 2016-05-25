@@ -2,20 +2,21 @@ package org.renci.gate.service.hatteras;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.renci.gate.AbstractGATEService;
 import org.renci.gate.GATEException;
 import org.renci.gate.GlideinMetric;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.renci.jlrm.slurm.SLURMJobStatusInfo;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
 import org.renci.jlrm.slurm.ssh.SLURMSSHKillCallable;
 import org.renci.jlrm.slurm.ssh.SLURMSSHLookupStatusCallable;
@@ -37,6 +38,21 @@ public class HatterasGATEService extends AbstractGATEService {
     }
 
     @Override
+    public void init() throws GATEException {
+        logger.debug("ENTERING init()");
+        try {
+            SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(getSite());
+            Set<JobStatusInfo> jobs = Executors.newSingleThreadExecutor().submit(callable).get();
+            if (CollectionUtils.isNotEmpty(jobs)) {
+                jobs.forEach(a -> logger.info(a.toString()));
+                setJobStatusInfo(jobs);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new GATEException(e);
+        }
+    }
+
+    @Override
     public Boolean isValid() throws GATEException {
         logger.debug("ENTERING isValid()");
         try {
@@ -52,31 +68,20 @@ public class HatterasGATEService extends AbstractGATEService {
     }
 
     @Override
-    public List<GlideinMetric> lookupMetrics() throws GATEException {
+    public List<GlideinMetric> getMetrics() throws GATEException {
         logger.debug("ENTERING lookupMetrics()");
         Map<String, GlideinMetric> metricsMap = new HashMap<String, GlideinMetric>();
-
         List<Queue> queueList = getSite().getQueueList();
-        for (Queue queue : queueList) {
-            metricsMap.put(queue.getName(), new GlideinMetric(getSite().getName(), queue.getName(), 0, 0));
-        }
-
+        queueList.forEach(a -> metricsMap.put(a.getName(), new GlideinMetric(getSite().getName(), a.getName(), 0, 0)));
         try {
-            SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(getSite());
-            Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(callable).get();
-            logger.debug("jobStatusSet.size(): {}", jobStatusSet.size());
-
-            if (jobStatusSet != null && jobStatusSet.size() > 0) {
-
-                String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-
-                for (SLURMJobStatusInfo info : jobStatusSet) {
-
+            String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
+            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
+                for (JobStatusInfo info : getJobStatusInfo()) {
                     if (!info.getJobName().equals(jobName)) {
                         continue;
                     }
-
-                    switch (info.getType()) {
+                    SLURMJobStatusType status = SLURMJobStatusType.valueOf(info.getStatus());
+                    switch (status) {
                         case PENDING:
                             metricsMap.get(info.getQueue()).incrementPending();
                             break;
@@ -125,24 +130,21 @@ public class HatterasGATEService extends AbstractGATEService {
         try {
             logger.info("siteInfo: {}", getSite());
             logger.info("queueInfo: {}", queue);
-            SLURMSSHLookupStatusCallable lookupStatusCallable = new SLURMSSHLookupStatusCallable(getSite());
-            Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(lookupStatusCallable)
-                    .get();
-            Iterator<SLURMJobStatusInfo> iter = jobStatusSet.iterator();
             String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-            while (iter.hasNext()) {
-                SLURMJobStatusInfo info = iter.next();
-                if (!info.getJobName().equals(jobName)) {
-                    continue;
+            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
+                for (JobStatusInfo info : getJobStatusInfo()) {
+                    if (!info.getJobName().equals(jobName)) {
+                        continue;
+                    }
+                    if (!info.getStatus().equals(SLURMJobStatusType.RUNNING)) {
+                        continue;
+                    }
+                    logger.info("deleting: {}", info.toString());
+                    SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
+                    Executors.newSingleThreadExecutor().submit(killCallable).get();
+                    // only delete one...engine will trigger next deletion
+                    break;
                 }
-                if (!info.getType().equals(SLURMJobStatusType.RUNNING)) {
-                    continue;
-                }
-                logger.debug("deleting: {}", info.toString());
-                SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
-                Executors.newSingleThreadExecutor().submit(killCallable).get();
-                // only delete one...engine will trigger next deletion
-                break;
             }
         } catch (Exception e) {
             throw new GATEException(e);
@@ -153,20 +155,19 @@ public class HatterasGATEService extends AbstractGATEService {
     public void deletePendingGlideins() throws GATEException {
         logger.debug("ENTERING deletePendingGlideins()");
         try {
-            SLURMSSHLookupStatusCallable lookupStatusCallable = new SLURMSSHLookupStatusCallable(getSite());
-            Set<SLURMJobStatusInfo> jobStatusSet = Executors.newSingleThreadExecutor().submit(lookupStatusCallable)
-                    .get();
             String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-            for (SLURMJobStatusInfo info : jobStatusSet) {
-                if (!info.getJobName().equals(jobName)) {
-                    continue;
-                }
-                if (info.getType().equals(SLURMJobStatusType.PENDING)) {
-                    logger.debug("deleting: {}", info.toString());
-                    SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
-                    Executors.newSingleThreadExecutor().submit(killCallable).get();
-                    // throttle the deleteGlidein calls such that SSH doesn't complain
-                    Thread.sleep(2000);
+            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
+                for (JobStatusInfo info : getJobStatusInfo()) {
+                    if (!info.getJobName().equals(jobName)) {
+                        continue;
+                    }
+                    if (info.getStatus().equals(SLURMJobStatusType.PENDING.toString())) {
+                        logger.info("deleting: {}", info.toString());
+                        SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
+                        Executors.newSingleThreadExecutor().submit(killCallable).get();
+                        // throttle the deleteGlidein calls such that SSH doesn't complain
+                        Thread.sleep(2000);
+                    }
                 }
             }
         } catch (Exception e) {
