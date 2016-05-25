@@ -135,6 +135,9 @@ public class HatterasGATEService extends AbstractGATEService {
                 if (!info.getJobName().equals(jobName)) {
                     continue;
                 }
+                if (!info.getType().equals(SLURMJobStatusType.RUNNING)) {
+                    continue;
+                }
                 logger.debug("deleting: {}", info.toString());
                 SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
                 Executors.newSingleThreadExecutor().submit(killCallable).get();
