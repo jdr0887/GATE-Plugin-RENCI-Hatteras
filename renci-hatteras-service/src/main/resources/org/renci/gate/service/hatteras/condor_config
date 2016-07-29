@@ -251,7 +251,7 @@ SCHEDD_ADDRESS_FILE	= $(SPOOL)/.schedd_address
 
 SCHEDD_DAEMON_AD_FILE = $(SPOOL)/.schedd_classad
 
-QUEUE_SUPER_USERS	= root, condor
+QUEUE_SUPER_USERS	= root, mapseq
 
 WINDOWS_RMDIR = $(SBIN)\condor_rmdir.exe
 
