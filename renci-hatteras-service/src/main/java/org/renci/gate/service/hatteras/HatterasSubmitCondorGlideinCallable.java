@@ -125,8 +125,13 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
             writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
             job.setExecutable(glideinScript);
 
-            File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
-            job.getInputFiles().add(condorConfig);
+            File condorConfigFile = new File(localWorkDir.getAbsolutePath(), "condor_config");
+            condorConfigFile.setReadable(true);
+            condorConfigFile.setExecutable(true);
+            condorConfigFile.setWritable(true, true);
+            FileUtils.writeStringToFile(condorConfigFile,
+                    IOUtils.toString(this.getClass().getResourceAsStream("condor_config")));
+            job.getInputFiles().add(condorConfigFile);
 
             SLURMSubmitScriptExporter<SLURMSSHJob> exporter = new SLURMSubmitScriptExporter<SLURMSSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, job);
