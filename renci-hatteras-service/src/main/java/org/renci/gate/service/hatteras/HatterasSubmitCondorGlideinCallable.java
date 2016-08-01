@@ -76,6 +76,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         job.setQueueName(this.queue.getName());
         job.setName(this.jobName);
         job.setHostCount(1);
+        job.setConstraint("hatteras==compute-*");
         job.setNumberOfProcessors(getQueue().getNumberOfProcessors());
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
