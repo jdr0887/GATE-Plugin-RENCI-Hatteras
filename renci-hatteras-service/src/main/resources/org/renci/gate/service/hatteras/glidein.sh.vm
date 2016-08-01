@@ -33,8 +33,8 @@ EOF
 # fix the condor config file
 cp ${remoteWorkDir}/condor_config $LOCAL_DIR/
 
-echo 'RELEASE_DIR = $CONDOR_HOME' >> $LOCAL_DIR/condor_config
-echo 'LOCAL_DIR = $LOCAL_DIR' >> $LOCAL_DIR/condor_config
+echo "RELEASE_DIR = $CONDOR_HOME" >> $LOCAL_DIR/condor_config
+echo "LOCAL_DIR = $LOCAL_DIR" >> $LOCAL_DIR/condor_config
 echo 'NUM_CPUS=${numberOfProcessors}' >> $LOCAL_DIR/condor_config
 echo 'CONDOR_HOST=${collectorHost}' >> $LOCAL_DIR/condor_config
 echo 'FILESYSTEM_DOMAIN=${collectorHost}' >> $LOCAL_DIR/condor_config
