@@ -1,7 +1,6 @@
 package org.renci.gate.service.hatteras;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -126,15 +125,7 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
             writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
             job.setExecutable(glideinScript);
 
-            String condorConfigLocalScriptMacro = IOUtils
-                    .toString(this.getClass().getResourceAsStream("condor_config.local.vm"));
-            File condorConfigLocal = new File(localWorkDir.getAbsolutePath(), "condor_config.local");
-            writeTemplate(velocityContext, condorConfigLocal, condorConfigLocalScriptMacro);
-            job.getInputFiles().add(condorConfigLocal);
-
-            String condorConfigScriptMacro = IOUtils.toString(this.getClass().getResourceAsStream("condor_config"));
             File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
-            writeTemplate(velocityContext, condorConfig, condorConfigScriptMacro);
             job.getInputFiles().add(condorConfig);
 
             SLURMSubmitScriptExporter<SLURMSSHJob> exporter = new SLURMSubmitScriptExporter<SLURMSSHJob>();
@@ -161,12 +152,9 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
                     break;
                 }
             }
-        } catch (FileNotFoundException e) {
-            logger.error("FileNotFoundException", e);
-            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            logger.error("IOException", e);
-            throw new JLRMException("IOException: " + e.getMessage());
+            logger.error(e.getMessage(), e);
+            throw new JLRMException("JSchException: " + e.getMessage());
         }
 
         return job;
