@@ -31,9 +31,20 @@ EOF
 . $LOCAL_DIR/env.sh
 
 # fix the condor config file
-cp ${remoteWorkDir}/condor_config ${remoteWorkDir}/condor_config.local $LOCAL_DIR/ 
-perl -p -i -e "s:^RELEASE_DIR.*:RELEASE_DIR = $CONDOR_HOME:" $LOCAL_DIR/condor_config
-perl -p -i -e "s:^LOCAL_DIR( |\t).*:LOCAL_DIR = $LOCAL_DIR:" $LOCAL_DIR/condor_config
+cp ${remoteWorkDir}/condor_config $LOCAL_DIR/
+
+echo 'RELEASE_DIR = $CONDOR_HOME' >> $LOCAL_DIR/condor_config
+echo 'LOCAL_DIR = $LOCAL_DIR' >> $LOCAL_DIR/condor_config
+echo 'NUM_CPUS=${numberOfProcessors}' >> $LOCAL_DIR/condor_config
+echo 'CONDOR_HOST=${collectorHost}' >> $LOCAL_DIR/condor_config
+echo 'FILESYSTEM_DOMAIN=${collectorHost}' >> $LOCAL_DIR/condor_config
+echo 'GLIDEIN_START_TIME = "${glideinStartTime}"' >> $LOCAL_DIR/condor_config
+echo 'JLRM_SITE_NAME = "${jlrmSiteName}"' >> $LOCAL_DIR/condor_config
+echo 'JLRM_USER = "${jlrmUser}"' >> $LOCAL_DIR/condor_config
+echo 'ALLOW_WRITE_COLLECTOR = $(ALLOW_WRITE), $(FLOCK_FROM), ${hostAllowWrite}' >> $LOCAL_DIR/condor_config
+echo 'ALLOW_WRITE_STARTD    = $(ALLOW_WRITE), $(FLOCK_FROM), ${hostAllowWrite}' >> $LOCAL_DIR/condor_config
+echo 'ALLOW_READ_COLLECTOR  = $(ALLOW_READ), $(FLOCK_FROM), ${hostAllowRead}' >> $LOCAL_DIR/condor_config
+echo 'ALLOW_READ_STARTD     = $(ALLOW_READ), $(FLOCK_FROM), ${hostAllowRead}' >> $LOCAL_DIR/condor_config
 
 condor_master -f -r ${maxRunTime}
 
