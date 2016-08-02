@@ -1,6 +1,7 @@
 package org.renci.gate.service.hatteras;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -126,13 +127,16 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
             writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
             job.setExecutable(glideinScript);
 
-            File condorConfigFile = new File(localWorkDir.getAbsolutePath(), "condor_config");
-            condorConfigFile.setReadable(true);
-            condorConfigFile.setExecutable(true);
-            condorConfigFile.setWritable(true, true);
-            FileUtils.writeStringToFile(condorConfigFile,
-                    IOUtils.toString(this.getClass().getResourceAsStream("condor_config")));
-            job.getInputFiles().add(condorConfigFile);
+            String condorConfigLocalScriptMacro = IOUtils
+                    .toString(this.getClass().getResourceAsStream("condor_config.local.vm"));
+            File condorConfigLocal = new File(localWorkDir.getAbsolutePath(), "condor_config.local");
+            writeTemplate(velocityContext, condorConfigLocal, condorConfigLocalScriptMacro);
+            job.getInputFiles().add(condorConfigLocal);
+
+            String condorConfigScriptMacro = IOUtils.toString(this.getClass().getResourceAsStream("condor_config"));
+            File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
+            writeTemplate(velocityContext, condorConfig, condorConfigScriptMacro);
+            job.getInputFiles().add(condorConfig);
 
             SLURMSubmitScriptExporter<SLURMSSHJob> exporter = new SLURMSubmitScriptExporter<SLURMSSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, job);
@@ -158,9 +162,12 @@ public class HatterasSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
                     break;
                 }
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+        } catch (FileNotFoundException e) {
+            logger.error("FileNotFoundException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
+        } catch (IOException e) {
+            logger.error("IOException", e);
+            throw new JLRMException("IOException: " + e.getMessage());
         }
 
         return job;
