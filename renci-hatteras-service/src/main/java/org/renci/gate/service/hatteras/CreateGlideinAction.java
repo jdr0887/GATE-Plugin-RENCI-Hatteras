@@ -29,7 +29,7 @@ public class CreateGlideinAction implements Action {
     private String hostAllow;
 
     @Option(name = "--numberOfProcessors", required = false, multiValued = false)
-    private String numberOfProcessors = "$(DETECTED_CORES)/2";
+    private String numberOfProcessors = "$(DETECTED_CORES)/4";
 
     public CreateGlideinAction() {
         super();
