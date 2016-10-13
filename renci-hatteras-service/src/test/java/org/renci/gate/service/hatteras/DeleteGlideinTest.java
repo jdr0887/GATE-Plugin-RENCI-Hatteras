@@ -41,7 +41,7 @@ public class DeleteGlideinTest {
                 if (!info.getJobName().equals(jobName)) {
                     continue;
                 }
-                if (!info.getStatus().equals(SLURMJobStatusType.RUNNING)) {
+                if (!info.getStatus().equals(SLURMJobStatusType.RUNNING.toString())) {
                     continue;
                 }
                 SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(site, info.getJobId());
@@ -49,6 +49,6 @@ public class DeleteGlideinTest {
                 break;
             }
         }
-
+        
     }
 }
