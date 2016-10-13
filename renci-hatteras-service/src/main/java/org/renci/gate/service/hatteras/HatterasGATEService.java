@@ -70,25 +70,30 @@ public class HatterasGATEService extends AbstractGATEService {
     @Override
     public List<GlideinMetric> getMetrics() throws GATEException {
         logger.debug("ENTERING lookupMetrics()");
+        List<GlideinMetric> metricList = new ArrayList<GlideinMetric>();
         Map<String, GlideinMetric> metricsMap = new HashMap<String, GlideinMetric>();
         List<Queue> queueList = getSite().getQueueList();
         queueList.forEach(a -> metricsMap.put(a.getName(), new GlideinMetric(getSite().getName(), a.getName(), 0, 0)));
         try {
             String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
-                for (JobStatusInfo info : getJobStatusInfo()) {
-                    if (!info.getJobName().equals(jobName)) {
-                        continue;
-                    }
-                    SLURMJobStatusType status = SLURMJobStatusType.valueOf(info.getStatus());
-                    switch (status) {
-                        case PENDING:
-                            metricsMap.get(info.getQueue()).incrementPending();
-                            break;
-                        case RUNNING:
-                            metricsMap.get(info.getQueue()).incrementRunning();
-                            break;
-                    }
+
+            if (CollectionUtils.isEmpty(getJobStatusInfo())) {
+                logger.warn("jobStatusInfo is empty");
+                return metricList;
+            }
+
+            for (JobStatusInfo info : getJobStatusInfo()) {
+                if (!info.getJobName().equals(jobName)) {
+                    continue;
+                }
+                SLURMJobStatusType status = SLURMJobStatusType.valueOf(info.getStatus());
+                switch (status) {
+                    case PENDING:
+                        metricsMap.get(info.getQueue()).incrementPending();
+                        break;
+                    case RUNNING:
+                        metricsMap.get(info.getQueue()).incrementRunning();
+                        break;
                 }
             }
 
@@ -96,9 +101,7 @@ public class HatterasGATEService extends AbstractGATEService {
             throw new GATEException(e);
         }
 
-        List<GlideinMetric> metricList = new ArrayList<GlideinMetric>();
         metricList.addAll(metricsMap.values());
-
         return metricList;
     }
 
@@ -131,20 +134,24 @@ public class HatterasGATEService extends AbstractGATEService {
             logger.info("siteInfo: {}", getSite());
             logger.info("queueInfo: {}", queue);
             String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
-                for (JobStatusInfo info : getJobStatusInfo()) {
-                    if (!info.getJobName().equals(jobName)) {
-                        continue;
-                    }
-                    if (!info.getStatus().equals(SLURMJobStatusType.RUNNING)) {
-                        continue;
-                    }
-                    logger.info("deleting: {}", info.toString());
-                    SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
-                    Executors.newSingleThreadExecutor().submit(killCallable).get();
-                    // only delete one...engine will trigger next deletion
-                    break;
+
+            if (CollectionUtils.isEmpty(getJobStatusInfo())) {
+                logger.warn("jobStatusInfo is empty");
+                return;
+            }
+
+            for (JobStatusInfo info : getJobStatusInfo()) {
+                if (!info.getJobName().equals(jobName)) {
+                    continue;
                 }
+                if (!info.getStatus().equals(SLURMJobStatusType.RUNNING.toString())) {
+                    continue;
+                }
+                logger.info("deleting: {}", info.toString());
+                SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
+                Executors.newSingleThreadExecutor().submit(killCallable).get();
+                // only delete one...engine will trigger next deletion
+                break;
             }
         } catch (Exception e) {
             throw new GATEException(e);
@@ -156,18 +163,20 @@ public class HatterasGATEService extends AbstractGATEService {
         logger.debug("ENTERING deletePendingGlideins()");
         try {
             String jobName = String.format("glidein-%s", getSite().getName().toLowerCase());
-            if (CollectionUtils.isNotEmpty(getJobStatusInfo())) {
-                for (JobStatusInfo info : getJobStatusInfo()) {
-                    if (!info.getJobName().equals(jobName)) {
-                        continue;
-                    }
-                    if (info.getStatus().equals(SLURMJobStatusType.PENDING.toString())) {
-                        logger.info("deleting: {}", info.toString());
-                        SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
-                        Executors.newSingleThreadExecutor().submit(killCallable).get();
-                        // throttle the deleteGlidein calls such that SSH doesn't complain
-                        Thread.sleep(2000);
-                    }
+            if (CollectionUtils.isEmpty(getJobStatusInfo())) {
+                logger.warn("jobStatusInfo is empty");
+                return;
+            }
+            for (JobStatusInfo info : getJobStatusInfo()) {
+                if (!info.getJobName().equals(jobName)) {
+                    continue;
+                }
+                if (info.getStatus().equals(SLURMJobStatusType.PENDING.toString())) {
+                    logger.info("deleting: {}", info.toString());
+                    SLURMSSHKillCallable killCallable = new SLURMSSHKillCallable(getSite(), info.getJobId());
+                    Executors.newSingleThreadExecutor().submit(killCallable).get();
+                    // throttle the deleteGlidein calls such that SSH doesn't complain
+                    Thread.sleep(2000);
                 }
             }
         } catch (Exception e) {
