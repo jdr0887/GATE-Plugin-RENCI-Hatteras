@@ -79,6 +79,7 @@ public class HatterasGATEService extends AbstractGATEService {
 
             if (CollectionUtils.isEmpty(getJobStatusInfo())) {
                 logger.warn("jobStatusInfo is empty");
+                metricList.addAll(metricsMap.values());
                 return metricList;
             }
 
